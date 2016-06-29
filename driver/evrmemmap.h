@@ -102,7 +102,7 @@ struct EvrQueues {
   struct DBufInfo  dbq[MAX_EVR_DBQ];       /*  8K + 16 */
   long long ewp;                           /*  20 */
   long long dwp;
-  int  fifofull;
+  long long fifofull;
 };
 
 struct MrfErRegs {

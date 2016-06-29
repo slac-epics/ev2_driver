@@ -148,9 +148,9 @@ long ev_unlocked_ioctl(struct file *filp,
 #else
 int ev_ioctl(struct inode *inode, struct file *filp,
 	     unsigned int cmd, unsigned long arg);
+#endif
 #ifdef CONFIG_COMPAT
 long ev_compat_ioctl(struct file *file, unsigned int cmd, unsigned long arg);
-#endif
 #endif
 int ev_fasync(int fd, struct file *filp, int mode);
 int ev_remap_mmap(struct file *filp, struct vm_area_struct *vma);

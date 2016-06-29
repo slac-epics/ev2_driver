@@ -48,9 +48,9 @@ static struct file_operations evr_fops = {
   .unlocked_ioctl = ev_unlocked_ioctl,
 #else
   .ioctl = ev_ioctl,
+#endif
 #ifdef CONFIG_COMPAT
   .compat_ioctl = ev_compat_ioctl,
-#endif
 #endif
   .open = ev_open,
   .release = ev_release,

@@ -431,13 +431,15 @@ ssize_t ev_write(struct file *filp, const char __user *buf, size_t count,
   return retval;
 }
 
-#ifndef HAVE_UNLOCKED_IOCTL
 #ifdef CONFIG_COMPAT
 long ev_compat_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 {
+#ifdef HAVE_UNLOCKED_IOCTL
+	return ev_unlocked_ioctl(file, cmd, arg);
+#else
 	return ev_ioctl(NULL, file, cmd, arg);
-}
 #endif
+}
 #endif
 
 /*
