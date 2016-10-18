@@ -843,11 +843,12 @@ irqreturn_t ev_interrupt(int irq, void *dev_id)
         int i;
         DPF((KERN_ALERT "I%08x\n", flags));
         /* Clear everything but FIFOFULL. */
-        if(flags & ~EVR_IRQFLAG_FIFOFULL)
+        if(flags & ~EVR_IRQFLAG_FIFOFULL) {
             pEr->IrqFlag = be32_to_cpu(flags & ~EVR_IRQFLAG_FIFOFULL);
             /* Now, reset interrupt flags to zero - MRF and SLAC G1 are immune to this, SLAC G2
                needs it. */
-            pEr->IrqFlag = be32_to_cpu(0); 
+            pEr->IrqFlag = be32_to_cpu(0);
+        }
 
         if(flags & EVR_IRQFLAG_DATABUF) {
             int databuf_sts = be32_to_cpu(pEr->DataBufControl);
@@ -908,9 +909,6 @@ irqreturn_t ev_interrupt(int irq, void *dev_id)
                needs it. */
             pEr->IrqFlag = be32_to_cpu(0); 
         }
-
-        /* This is a redundant interrupt flag clear-all. */
-        /* pEr->IrqFlag = be32_to_cpu(flags); */
 
         for (i = 0; i < MAX_EVR_OPENS; i++)
             if (ev_device->shared[i].parent) {
