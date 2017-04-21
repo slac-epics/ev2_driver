@@ -1,0 +1,9 @@
+*~
+O.*
+*.log
+*.swp
+bin/
+include/
+lib/
+RELEASE_SITE
+tags

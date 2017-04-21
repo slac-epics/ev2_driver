@@ -1,0 +1,15 @@
+#
+# RELEASE_NOTES
+#
+
+R1.0.2		2017-04-20 Bruce Hill
+	Updated build support to git workflow
+
+R1.0.1		2016-10-18 Michael C. Browne
+	Release modules/ev2_driver/R1.0.1: Latest and greatest.
+	Fix missing brackets.
+
+R1.0.0		2016-06-29 Michael C. Browne
+	Baseline event2 kernel driver.
+	Move driver into new directory.
+	New directory for event2 kernel driver.
