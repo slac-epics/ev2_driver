@@ -1,0 +1,4 @@
+Beyond building the module, it must be signed to avoid tainting the kernel.
+
+From the kernel source directory, run:
+     ./scripts/sign-file sha512 ./signing_key.priv ./signing_key.x509 $(KO_FILE)
