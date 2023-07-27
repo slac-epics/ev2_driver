@@ -100,7 +100,7 @@ struct DBufInfo {
 #define MAX_EVR_DBQ2   16
 struct EvrQueues {
   struct FIFOEvent evtq[MAX_EVR_EVTQ];     /* 12K */
-  struct DBufInfo  dbq[MAX_EVR_DBQ];       /*  8K + 16 */
+  struct DBufInfo  dbq[MAX_EVR_DBQ];       /*  8K + 16 - Obsolete!  Use dbq2 instead! */
   long long ewp;                           /*  20 */
   long long dwp;
   long long fifofull;

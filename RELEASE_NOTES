@@ -2,6 +2,11 @@
 # RELEASE_NOTES
 #
 
+R1.0.3          2023-07-27 Michael C. Browne
+        Updated to eliminate duplicate data buffers and add a second,
+	deeper, data buffer queue.  The old queue, dbq, should be considered
+	obsolete.
+
 R1.0.2		2017-04-20 Bruce Hill
 	Updated build support to git workflow
 
