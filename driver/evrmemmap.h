@@ -97,12 +97,23 @@ struct DBufInfo {
 /* These must be powers of two!!! */
 #define MAX_EVR_EVTQ 1024
 #define MAX_EVR_DBQ     4
+#define MAX_EVR_DBQ2   16
 struct EvrQueues {
   struct FIFOEvent evtq[MAX_EVR_EVTQ];     /* 12K */
-  struct DBufInfo  dbq[MAX_EVR_DBQ];       /*  8K + 16 */
+  struct DBufInfo  dbq[MAX_EVR_DBQ];       /*  8K + 16 - Obsolete!  Use dbq2 instead! */
   long long ewp;                           /*  20 */
   long long dwp;
   long long fifofull;
+  /*
+   * Sigh... turns out that a data buffer queue of 4 isn't deep enough.
+   * But let's be good members of the First Church of Backwards Compatibility
+   * and just add a *second* larger queue!  AMEN!
+   *
+   * Why 16?  Because tests have shown occasional user-space interrupt handler
+   * calls that service more than 4 but less than 8 fiducials.  We've never hit
+   * 8... but let's give ourselves some margin and set it to 16.
+   */
+  struct DBufInfo  dbq2[MAX_EVR_DBQ2];     /* 32K + 64 */
 };
 
 struct MrfErRegs {

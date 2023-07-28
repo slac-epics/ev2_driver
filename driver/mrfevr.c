@@ -259,6 +259,8 @@ static int pci_evr_probe(struct pci_dev *pcidev, const struct pci_device_id *dev
   for (i = 0; i < EVR_MAX_PULSES; i++)
       ev_device->pulse[i] = -1;
 
+  ev_device->lastnsec = -1;
+
   ErInitializeRams(ev_device->pEv);
   ((struct MrfErRegs *)ev_device->pEv)->IrqEnable = 0;
 

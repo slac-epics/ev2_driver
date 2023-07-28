@@ -128,6 +128,7 @@ struct mrf_dev {
   void            *evrq;           /* Page-aligned memory for the queues. */
   char             pulse[EVR_MAX_PULSES];
   struct shared_mrf shared[MAX_EVR_OPENS];
+  int               lastnsec;
 };
 #define SLAC_EVR(pEr) ((pEr)->device_first)
 #define MRF_EVR(pEr)  (!(pEr)->device_first)

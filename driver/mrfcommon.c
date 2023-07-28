@@ -853,22 +853,31 @@ irqreturn_t ev_interrupt(int irq, void *dev_id)
         if(flags & EVR_IRQFLAG_DATABUF) {
             int databuf_sts = be32_to_cpu(pEr->DataBufControl);
             long long nextbp = evrq->dwp;
-            int idx = nextbp & (MAX_EVR_DBQ - 1);
+            int idx  = nextbp & (MAX_EVR_DBQ - 1);
+            int idx2 = nextbp & (MAX_EVR_DBQ2 - 1);
+            int lastnsec = -2;
 
             evrq->dbq[idx].status = databuf_sts;
+            evrq->dbq2[idx2].status = databuf_sts;
             if (!(databuf_sts & (1<<C_EVR_DATABUF_CHECKSUM))) {
                 /* If no checksum error, grab the buffer too. */
                 int size = (databuf_sts & ((1<<(C_EVR_DATABUF_SIZEHIGH+1))-1));
                 u32 *dd   = evrq->dbq[idx].data;
+                u32 *d2   = evrq->dbq2[idx2].data;
                 volatile u32 *ds   = pEr->Databuf;
 
-                for (i = 0;  i < (size >> 2);  i++)
-                    dd[i] = be32_to_cpu(ds[i]);
+                for (i = 0;  i < (size >> 2);  i++) {
+                    dd[i] = d2[i] = be32_to_cpu(ds[i]);
+		}
+	        lastnsec = (int)dd[8];
 #if 0
                 printk(KERN_ALERT "D%d: %08x %08x.%08x\n", idx, dd[0], dd[7], dd[8]);
 #endif
             }
-            evrq->dwp++;
+	    if (lastnsec != ev_device->lastnsec) { /* Only count this if it's new!! */
+		evrq->dwp++;
+		ev_device->lastnsec = lastnsec;
+	    }
             /* TBD - barrier? */
             /* If no one is listening, stop the data buffer! */
             if (EVR_IRQFLAG_DATABUF & be32_to_cpu(((struct MrfErRegs *)ev_device->pEv)->IrqEnable))
