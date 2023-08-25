@@ -35,8 +35,11 @@ else
 #
 # Start with the regular build stuff.
 #
+DO_INCLUDES?=y
 TOP = ..
+ifeq ($(DO_INCLUDES), y)
 include $(TOP)/configure/CONFIG
+endif
 
 INC += evrmemmap.h
 
@@ -51,7 +54,9 @@ evrAllocSRCS += evrAlloc.c
 #---------------------
 # Generic EPICS build rules
 #
+ifeq ($(DO_INCLUDES), y)
 include $(TOP)/configure/RULES
+endif
 
 #
 # Now, this is for compiling the modules.
