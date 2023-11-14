@@ -7,5 +7,6 @@ include
 modules.order
 Module.symvers
 .tmp_versions
+RELEASE_SITE
 O.*
 *~

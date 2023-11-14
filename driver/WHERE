@@ -1,12 +1,13 @@
-Anything after March 15, 2016 is the new driver.
+Compilations as of 8/28/2023:
 
-2.6.18-164.15.1.el5.x86_64	ioc-tst-rec03
-2.6.18-371.el5.x86_64		daq-amo-mon01
-2.6.26.1.i686				NOT USED!
-2.6.26.1.x86_64				daq-amo-cam02
-2.6.35.13-rt-bond.x86_64	NOT USED!
-2.6.35.13-rt.i686			ioc-fee-gasdet-daq
-2.6.35.13-rt.x86_64			ioc-mec-lasmot1
-2.6.32-504.8.1.el6.x86_64	psdev105
-3.14.12-rt9.x86_64			psdev105 (any rhel6)
-3.18.11-rt7.x86_64			psdev105 (any rhel6)
+ioc-mec-ipimb01    2.6.18-164.15.1.el5.x86_64
+ioc-mec-lasmot1    2.6.35.13-rt.x86_64
+ioc-xpp-rec02      3.10.0-1160.2.2.el7.x86_64
+tmo-control        3.10.0-1160.90.1.el7.x86_64
+daq-tmo-hsd-01     3.10.0-1062.9.1.el7.x86_64
+ued-daq            3.10.0-1160.90.1.el7.x86_64
+
+Note:
+ioc-lfe-gasdet-daq uses 2.6.26.8-rt16.i686.  This doesn't seem to compile natively.
+Maybe with:
+make KERNELDIR=/cds/home/m/mcbrowne/src/linux-2.6.26.8-rt DO_INCLUDES=n

@@ -13,8 +13,9 @@
   Note: Byte ordering is big-endian.
  */
 
-#define EVR_MEM_WINDOW      ((sizeof(struct MrfErRegs) + PAGE_SIZE) & PAGE_MASK)
-#define EVR_SH_MEM_WINDOW   ((sizeof(struct EvrQueues) + PAGE_SIZE) & PAGE_MASK)
+#define EVR_MEM_WINDOW        ((sizeof(struct MrfErRegs) + PAGE_SIZE) & PAGE_MASK)
+#define EVR_SH_MEM_WINDOW     ((sizeof(struct EvrQueues) + PAGE_SIZE) & PAGE_MASK)
+#define EVR_SH_MEM_WINDOW_OLD ((sizeof(struct EvrQueues) - MAX_EVR_DBQ2*sizeof(struct DBufInfo) + PAGE_SIZE) & PAGE_MASK)
 
 #ifndef u16
 #define u16 unsigned short
