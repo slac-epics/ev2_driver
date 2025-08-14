@@ -143,6 +143,9 @@ ssize_t ev_read(struct file *filp, char __user *buf, size_t count,
 		loff_t *f_pos);
 ssize_t ev_write(struct file *filp, const char __user *buf, size_t count,
 		 loff_t *f_pos);
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,9,0) /* The HAVE_UNLOCKED_IOCTL flag was removed */
+#define HAVE_UNLOCKED_IOCTL 1
+#endif
 #ifdef HAVE_UNLOCKED_IOCTL
 long ev_unlocked_ioctl(struct file *filp,
 	     unsigned int cmd, unsigned long arg);
