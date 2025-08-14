@@ -469,8 +469,13 @@ struct page *ev_vma_nopage(struct vm_area_struct *vma, unsigned long address, in
 {
     return NOPAGE_SIGBUS;
 }
-#else
+#elif LINUX_VERSION_CODE < KERNEL_VERSION(4, 17, 0)
 int ev_vma_fault(struct vm_area_struct *vma, struct vm_fault *vmf)
+{
+    return VM_FAULT_SIGBUS;
+}
+#else
+vm_fault_t ev_vma_fault(struct vm_fault *vmf)
 {
     return VM_FAULT_SIGBUS;
 }
@@ -623,9 +628,17 @@ int ev_ioctl(struct inode *inode, struct file *filp,
     return -ENOTTY;
   /* Check access */
   if (_IOC_DIR(cmd) & _IOC_READ)
+#ifdef VERIFY_WRITE
     ret = !access_ok(VERIFY_WRITE, (void __user *)arg, _IOC_SIZE(cmd));
+#else
+    ret = !access_ok((void __user *)arg, _IOC_SIZE(cmd));
+#endif
   else if (_IOC_DIR(cmd) & _IOC_WRITE)
+#ifdef VERIFY_READ
     ret = !access_ok(VERIFY_READ, (void __user *)arg, _IOC_SIZE(cmd));
+#else
+    ret = !access_ok((void __user *)arg, _IOC_SIZE(cmd));
+#endif
   if (ret)
     return -EFAULT;
 

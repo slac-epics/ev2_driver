@@ -34,6 +34,14 @@ MODULE_LICENSE("GPL");
 
 #define DEVICE_NAME           "evr_device"
 
+/* ioremap_nocache was removed in 5.6+. though ioremap and ioremap_nocache
+   have been the same since 2.6.25. */
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 25)
+#define IOREMAP_NOCACHE(address, size) ioremap(address, size)
+#else
+#define IOREMAP_NOCACHE(address, size) ioremap_nocache(address, size)
+#endif
+
 extern struct mrf_dev mrf_devices[MAX_MRF_DEVICES];
 static struct timer_list mrf_timer;
 
@@ -198,7 +206,7 @@ static int pci_evr_probe(struct pci_dev *pcidev, const struct pci_device_id *dev
     if (request_mem_region(ev_device->mrEv, ev_device->lenEv,
 			   DEVICE_NAME) != NULL)
       {
-        ev_device->pEv = ioremap_nocache(evr_base_start,
+        ev_device->pEv = IOREMAP_NOCACHE(evr_base_start,
 					 ev_device->lenEv);
       }
   } else {
@@ -211,7 +219,7 @@ static int pci_evr_probe(struct pci_dev *pcidev, const struct pci_device_id *dev
     if (request_mem_region(ev_device->mrLC, ev_device->lenLC,
 		 	   DEVICE_NAME) != NULL)
       {
-        ev_device->pLC = ioremap_nocache(local_conf_start,
+        ev_device->pLC = IOREMAP_NOCACHE(local_conf_start,
 				         ev_device->lenLC);
       }
 
@@ -224,7 +232,7 @@ static int pci_evr_probe(struct pci_dev *pcidev, const struct pci_device_id *dev
     if (request_mem_region(ev_device->mrEv, ev_device->lenEv,
 			   DEVICE_NAME) != NULL)
       {
-        ev_device->pEv = ioremap_nocache(evr_base_start,
+        ev_device->pEv = IOREMAP_NOCACHE(evr_base_start,
 					 ev_device->lenEv);
       }
 
@@ -327,7 +335,11 @@ int ev_assign_irq(struct mrf_dev *ev_device)
   return result;
 }
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4,14,0)
 void mrf_callback(unsigned long data)
+#else
+void mrf_callback(struct timer_list *data)
+#endif
 {
     int i;
 
@@ -345,7 +357,11 @@ static int __init pci_evr_init(void)
   /* Allocate and clear memory for all devices. */
   memset(mrf_devices, 0, sizeof(struct mrf_dev)*MAX_MRF_DEVICES);
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4,14,0)
   setup_timer(&mrf_timer, mrf_callback, 0);
+#else
+  timer_setup(&mrf_timer, mrf_callback, 0);
+#endif
   mod_timer(&mrf_timer, jiffies + msecs_to_jiffies(1000));
 
   printk(KERN_ALERT "Event Receiver PCI driver 2.1 (ev2_driver 1.0.4) init.\n");
